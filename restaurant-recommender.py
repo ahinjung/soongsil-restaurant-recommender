@@ -12,7 +12,7 @@ soongsil_restaurants = [
     "밀플랜비 숭실대점", "샹츠마라 숭실대점", "준호네즉석떡볶이 숭실대", "신전떡볶이 숭실대", "아리랑컵밥 숭실대점"
 ]
 
-# 가격 정보 (원 단위)
+# 가격 (원)
 price_info = {
     "명태촌 숭실대점": 16000,
     "명품고향삼계탕 숭실대": 15000,
@@ -48,7 +48,7 @@ price_info = {
     "아리랑컵밥 숭실대점": 4700
 }
 
-# 식당별 URL (예시)
+# 식당 지도 URL
 url_info = {
     "명태촌 숭실대점": "https://map.kakao.com/?q=명태촌+숭실대점",
     "명품고향삼계탕 숭실대": "https://map.kakao.com/?q=명품고향삼계탕+숭실대",
@@ -145,7 +145,7 @@ budget_dict = {
     "1": 10000,
     "2": 15000,
     "3": 20000,
-    "4": 100000  # 20,000 이상 ~ (큰 숫자 넣음)
+    "4": 100000
 }
 
 # 터틀 초기 설정
@@ -226,16 +226,13 @@ def draw_recommendation(restaurant, price, url):
     turtle.done()
 
 def recommend_restaurant_with_turtle(weather, mood, budget):
-    # Step 1: 후보군 불러오기
     weather_candidates = weather_dict.get(weather, soongsil_restaurants)
     mood_candidates = mood_dict.get(mood, soongsil_restaurants)
     max_budget = budget_dict.get(budget, 1000000)
     budget_candidates = filter_by_budget(soongsil_restaurants, max_budget)
 
-    # Step 2: 교집합 후보
     final_candidates = set(budget_candidates) & set(weather_candidates) & set(mood_candidates)
 
-    # Step 3: 조건 완화
     if not final_candidates:
         final_candidates = set(weather_candidates) & set(mood_candidates)
         if not final_candidates:
@@ -243,12 +240,11 @@ def recommend_restaurant_with_turtle(weather, mood, budget):
         if not final_candidates:
             final_candidates = set(soongsil_restaurants)
 
-    # Step 4: 최종 추천
     restaurant = random.choice(list(final_candidates))
     price = price_info.get(restaurant, "가격 정보 없음")
     url = url_info.get(restaurant, "URL 없음")
 
-    # Step 5: 시각화 출력
     draw_recommendation(restaurant, price, url)
 
 recommend_restaurant_with_turtle(weather, mood, budget)
+
